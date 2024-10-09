@@ -26,6 +26,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 abstract class OpenIDProvider<S : AuthorizationSession>(
+    // configのbaseurl
     val baseUrl: String,
 ) : ISessionCache<S>, ITokenProvider {
     abstract val metadata: OpenIDProviderMetadata

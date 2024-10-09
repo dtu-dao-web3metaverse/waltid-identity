@@ -206,6 +206,7 @@ abstract class OpenIDCredentialIssuer(
             "Session invalid"
         )
         log.debug { "Credential request to validate: $credentialRequest" }
+        println("@@@@@aaaacredentialRequest: $credentialRequest")
         if (credentialRequest.proof == null || !validateProofOfPossession(credentialRequest, nonce)) {
             throw createCredentialError(
                 credentialRequest,
@@ -316,6 +317,7 @@ abstract class OpenIDCredentialIssuer(
         credentialResult: CredentialResult,
         session: IssuanceSession,
     ): CredentialResponse {
+        println("@@@@@credentialResult: $credentialResult")
         return credentialResult.credential?.let {
             CredentialResponse.success(credentialResult.format, it, customParameters = credentialResult.customParameters)
         } ?: generateProofOfPossessionNonceFor(session).let { updatedSession ->

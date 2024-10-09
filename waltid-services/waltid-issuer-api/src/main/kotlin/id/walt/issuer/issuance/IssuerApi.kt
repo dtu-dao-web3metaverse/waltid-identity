@@ -344,6 +344,7 @@ fun Application.issuerApi() {
                     }) {
                         runCatching {
                             val jwtIssuanceRequest = context.receive<IssuanceRequest>()
+                            // @@@@@@
                             val offerUri = createCredentialOfferUri(listOf(jwtIssuanceRequest), getFormatByCredentialConfigurationId(jwtIssuanceRequest.credentialConfigurationId) ?: throw IllegalArgumentException("Invalid Credential Configuration Id"), getCallbackUriHeader())
                             context.respond(HttpStatusCode.OK, offerUri)
                         }.onFailure {

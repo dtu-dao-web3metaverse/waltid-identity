@@ -239,6 +239,7 @@ open class CIProvider : OpenIDCredentialIssuer(
             ?: throw DeferredCredentialError(CredentialErrorCode.invalid_request, message = "Invalid credential ID given")
     }
 
+    // @@@@
     @OptIn(ExperimentalSerializationApi::class, ExperimentalStdlibApi::class)
     private fun doGenerateCredential(
         credentialRequest: CredentialRequest,
@@ -289,6 +290,7 @@ open class CIProvider : OpenIDCredentialIssuer(
                     )
                 )
             ) ?: throw IllegalArgumentException("No matching issuance session data for nonce: $nonce")
+            println("@@@@@issue VC data: $data")
         } else {
             log.debug { "RETRIEVING VC FROM TOKEN MAPPING: $nonce" }
             findMatchingSessionData(
