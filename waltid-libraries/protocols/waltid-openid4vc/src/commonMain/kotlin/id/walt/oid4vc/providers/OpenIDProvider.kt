@@ -312,6 +312,7 @@ abstract class OpenIDProvider<S : AuthorizationSession>(
         }
     }
 
+    // tokenリクエストの処理
     open fun processTokenRequest(tokenRequest: TokenRequest): TokenResponse {
         val code = when (tokenRequest.grantType) {
             GrantType.authorization_code -> tokenRequest.code ?: throw TokenError(

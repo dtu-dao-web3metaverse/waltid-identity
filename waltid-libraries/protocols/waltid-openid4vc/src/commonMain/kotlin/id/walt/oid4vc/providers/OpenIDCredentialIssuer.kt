@@ -116,6 +116,7 @@ abstract class OpenIDCredentialIssuer(
     }
 
 
+    // 事前認可コード生成@@@@@
     open fun initializeCredentialOffer(
         credentialOfferBuilder: CredentialOffer.Builder,
         expiresIn: Duration,

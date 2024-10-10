@@ -184,17 +184,20 @@ open class CIProvider : OpenIDCredentialIssuer(
     }
 
     override fun verifyTokenSignature(target: TokenTarget, token: String) = runBlocking {
-        log.debug { "Verifying JWS: $token" }
-        log.debug { "JWS Verification: target: $target" }
+        log.info { "Verifying JWS: $token" }
+        log.info { "JWS Verification: target: $target" }
 
         val tokenHeader = Json.parseToJsonElement(token.split(".")[0].base64UrlDecode().decodeToString()).jsonObject
         val key = if (tokenHeader["jwk"] != null) {
+            log.info { "aaaaa" }
             JWKKey.importJWK(tokenHeader["jwk"].toString()).getOrThrow()
         } else if (tokenHeader["kid"] != null) {
+            log.info { "bbbb" }
             val did = tokenHeader["kid"]!!.jsonPrimitive.content.split("#")[0]
             log.debug { "Resolving DID: $did" }
             DidService.resolveToKey(did).getOrThrow()
         } else {
+            log.info { "cccc: $CI_TOKEN_KEY" }
             CI_TOKEN_KEY
         }
         key.verifyJws(token).also { log.debug { "VERIFICATION IS: $it" } }
