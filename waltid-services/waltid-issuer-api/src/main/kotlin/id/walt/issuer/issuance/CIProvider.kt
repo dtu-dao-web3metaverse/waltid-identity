@@ -290,7 +290,7 @@ open class CIProvider : OpenIDCredentialIssuer(
                     )
                 )
             ) ?: throw IllegalArgumentException("No matching issuance session data for nonce: $nonce")
-            println("@@@@@issue VC data: $data")
+
         } else {
             log.debug { "RETRIEVING VC FROM TOKEN MAPPING: $nonce" }
             findMatchingSessionData(
@@ -299,6 +299,7 @@ open class CIProvider : OpenIDCredentialIssuer(
                     ?: throw IllegalArgumentException("No matching issuance session data found for nonce: $nonce!")
             ) ?: throw IllegalArgumentException("No matching issuance session data found for nonce: $nonce!")
         }
+        println("@@@@@issue VC data: $data")
 
         return CredentialResult(format = credentialRequest.format, credential = JsonPrimitive(runBlocking {
             val vc = data.request.credentialData ?: throw MissingFieldException(listOf("credentialData"), "credentialData")
