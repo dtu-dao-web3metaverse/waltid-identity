@@ -42,6 +42,7 @@ import java.util.Base64
 class VerificationUseCase(
     val http: HttpClient, cryptoProvider: JWTCryptoProvider,
 ) {
+    // VPのQR表示@@@
     private val logger = logger("Verification")
     suspend fun createSession(
         vpPoliciesJson: JsonElement?,

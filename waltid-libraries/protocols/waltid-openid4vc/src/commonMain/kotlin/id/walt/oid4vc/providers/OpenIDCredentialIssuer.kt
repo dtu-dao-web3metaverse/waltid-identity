@@ -116,6 +116,7 @@ abstract class OpenIDCredentialIssuer(
     }
 
 
+    // 事前認可コード生成@@@@@
     open fun initializeCredentialOffer(
         credentialOfferBuilder: CredentialOffer.Builder,
         expiresIn: Duration,
@@ -206,6 +207,7 @@ abstract class OpenIDCredentialIssuer(
             "Session invalid"
         )
         log.debug { "Credential request to validate: $credentialRequest" }
+        println("@@@@@aaaacredentialRequest: $credentialRequest")
         if (credentialRequest.proof == null || !validateProofOfPossession(credentialRequest, nonce)) {
             throw createCredentialError(
                 credentialRequest,
@@ -316,6 +318,7 @@ abstract class OpenIDCredentialIssuer(
         credentialResult: CredentialResult,
         session: IssuanceSession,
     ): CredentialResponse {
+        println("@@@@@credentialResult: $credentialResult")
         return credentialResult.credential?.let {
             CredentialResponse.success(credentialResult.format, it, customParameters = credentialResult.customParameters)
         } ?: generateProofOfPossessionNonceFor(session).let { updatedSession ->

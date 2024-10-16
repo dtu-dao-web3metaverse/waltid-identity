@@ -109,9 +109,12 @@ object OidcApi : CIProvider() {
 
             get("/authorize") {
                 val authReq = runBlocking { AuthorizationRequest.fromHttpParametersAuto(call.parameters.toMap()) }
+                logger.info { "@@@@authReq is: $authReq" }
                 try {
                     val issuanceSessionData =
                         OidcApi.sessionCredentialPreMapping[authReq.issuerState!!] ?: error("No such pre mapping: ${authReq.issuerState}")
+                    logger.info { "@@@@issuanceSessionData is: $issuanceSessionData" }
+                    logger.info { "@@@@authReq.toHttpQueryString() is: $authReq.toHttpQueryString()" }
                     val authMethod = issuanceSessionData.first().request.authenticationMethod ?: AuthenticationMethod.NONE
                     val authResp: Any = when {
                         ResponseType.Code in authReq.responseType -> {
