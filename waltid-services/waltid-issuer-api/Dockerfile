@@ -45,8 +45,12 @@ COPY --from=buildstage /work/waltid-services/waltid-issuer-api/build/install/ /
 
 WORKDIR /waltid-issuer-api
 
-RUN mkdir /waltid-issuer-api/config && chown waltid:waltid /waltid-issuer-api/config
-USER waltid
+# RUN mkdir /waltid-issuer-api/config && chown waltid:waltid /waltid-issuer-api/config
+# USER waltid
+
+# configディレクトリを作成し、ホストのファイルをコピー
+RUN mkdir /waltid-issuer-api/config
+COPY waltid-services/waltid-issuer-api/config /waltid-issuer-api/config
 
 EXPOSE 7002
 ENTRYPOINT ["/waltid-issuer-api/bin/waltid-issuer-api"]
