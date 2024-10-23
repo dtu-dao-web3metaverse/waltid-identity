@@ -30,8 +30,8 @@ services:
       - caddy
     env_file:
       - .env
-    volumes:
-      - ./issuer-api/config:/waltid-issuer-api/config
+    # volumes:
+    #   - ./issuer-api/config:/waltid-issuer-api/config
 
   verifier-api:
     platform: linux/x86_64
