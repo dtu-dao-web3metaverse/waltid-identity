@@ -43,8 +43,12 @@ COPY --from=buildstage /work/waltid-services/waltid-verifier-api/build/install/ 
 
 WORKDIR /waltid-verifier-api
 
-RUN mkdir /waltid-verifier-api/config && chown waltid:waltid /waltid-verifier-api/config
-USER waltid
+# RUN mkdir /waltid-verifier-api/config && chown waltid:waltid /waltid-verifier-api/config
+# USER waltid
+
+# configディレクトリを作成し、ホストのファイルをコピー
+RUN mkdir /waltid-verifier-api/config
+COPY waltid-services/waltid-verifier-api/config /waltid-verifier-api/config
 
 EXPOSE 7003
 ENTRYPOINT ["/waltid-verifier-api/bin/waltid-verifier-api"]
