@@ -36,15 +36,17 @@ suspend fun createCredentialOfferUri(
     callbackUrl: String? = null,
     expiresIn: Duration = 5.minutes,
 ): String {
+    logger.info { "@@@issuanceRequests: $issuanceRequests" }
+    logger.info { "@@@credentialFormat: $credentialFormat" }
     val overwrittenIssuanceRequests = issuanceRequests.map {
         it.copy(
             credentialFormat = credentialFormat,
             vct = if (credentialFormat == CredentialFormat.sd_jwt_vc) getVctByCredentialConfigurationId(it.credentialConfigurationId) ?: throw IllegalArgumentException("VCT not found") else null)
     }
-
+    logger.info { "@@@overwrittenIssuanceRequests: $overwrittenIssuanceRequests" }
     val credentialOfferBuilder =
         OidcIssuance.issuanceRequestsToCredentialOfferBuilder(overwrittenIssuanceRequests)
-
+    logger.info { "@@@credentialOfferBuilder: $credentialOfferBuilder" }
     val issuanceSession = OidcApi.initializeCredentialOffer(
         credentialOfferBuilder = credentialOfferBuilder,
         expiresIn,
@@ -56,7 +58,8 @@ suspend fun createCredentialOfferUri(
 
     OidcApi.setIssuanceDataForIssuanceId(issuanceSession.id, overwrittenIssuanceRequests.map {
         val key = KeyManager.resolveSerializedKey(it.issuerKey)
-
+        logger.info { "@@@key: $key" }
+        logger.info { "@@@it: $it" }
         CIProvider.IssuanceSessionData(
             id = issuanceSession.id,
             issuerKey = key,
@@ -66,11 +69,11 @@ suspend fun createCredentialOfferUri(
         )
     })  // TODO: Hack as this is non stateless because of oidc4vc lib API
 
-    logger.debug { "issuanceSession: $issuanceSession" }
+    logger.info { "issuanceSession: $issuanceSession" }
 
     val offerRequest =
         CredentialOfferRequest(null, "${OidcApi.baseUrl}/openid4vc/credentialOffer?id=${issuanceSession.id}")
-    logger.debug { "offerRequest: $offerRequest" }
+    logger.info { "offerRequest: $offerRequest" }
 
     val offerUri = OidcApi.getCredentialOfferRequestUrl(
         offerRequest,
@@ -348,6 +351,7 @@ fun Application.issuerApi() {
                     }) {
                         runCatching {
                             val jwtIssuanceRequest = context.receive<IssuanceRequest>()
+                            // @@@@@@
                             val offerUri = createCredentialOfferUri(listOf(jwtIssuanceRequest), getFormatByCredentialConfigurationId(jwtIssuanceRequest.credentialConfigurationId) ?: throw IllegalArgumentException("Invalid Credential Configuration Id"), getCallbackUriHeader())
                             context.respond(HttpStatusCode.OK, offerUri)
                         }.onFailure {

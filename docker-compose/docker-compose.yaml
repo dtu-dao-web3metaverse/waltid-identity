@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "localhost:host-gateway"
     volumes:
       - ./wallet-api/config:/waltid-wallet-api/config
       - ./wallet-api/walt.yaml:/waltid-wallet-api/walt.yaml
@@ -21,7 +21,7 @@ services:
 
   issuer-api:
     platform: linux/x86_64
-    image: docker.io/waltid/issuer-api:${VERSION_TAG:-latest}
+    # image: docker.io/waltid/issuer-api:${VERSION_TAG:-latest}
     pull_policy: always
     build:
       context: ../
@@ -30,12 +30,12 @@ services:
       - caddy
     env_file:
       - .env
-    volumes:
-      - ./issuer-api/config:/waltid-issuer-api/config
+    # volumes:
+    #   - ./issuer-api/config:/waltid-issuer-api/config
 
   verifier-api:
     platform: linux/x86_64
-    image: docker.io/waltid/verifier-api:${VERSION_TAG:-latest}
+    # image: docker.io/waltid/verifier-api:${VERSION_TAG:-latest}
     pull_policy: always
     build:
       context: ../
@@ -44,8 +44,8 @@ services:
       - caddy
     env_file:
       - .env
-    volumes:
-      - ./verifier-api/config:/waltid-verifier-api/config
+    # volumes:
+    #   - ./verifier-api/config:/waltid-verifier-api/config
 
   waltid-demo-wallet:
     image: docker.io/waltid/waltid-demo-wallet:${VERSION_TAG:-latest}
@@ -85,10 +85,10 @@ services:
     depends_on:
       - caddy
     environment:
-      NEXT_PUBLIC_VC_REPO: "http://host.docker.internal:$VC_REPO_PORT"
-      NEXT_PUBLIC_ISSUER: "http://host.docker.internal:$ISSUER_API_PORT"
-      NEXT_PUBLIC_VERIFIER: "http://host.docker.internal:$VERIFIER_API_PORT"
-      NEXT_PUBLIC_WALLET: "http://host.docker.internal:$DEMO_WALLET_FRONTEND_PORT"
+      NEXT_PUBLIC_VC_REPO: "http://localhost:$VC_REPO_PORT"
+      NEXT_PUBLIC_ISSUER: "http://localhost:$ISSUER_API_PORT"
+      NEXT_PUBLIC_VERIFIER: "http://localhost:$VERIFIER_API_PORT"
+      NEXT_PUBLIC_WALLET: "http://localhost:$DEMO_WALLET_FRONTEND_PORT"
       PORT: $WEB_PORTAL_PORT
 
   vc-repo:

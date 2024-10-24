@@ -26,6 +26,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalUuidApi::class)
 abstract class OpenIDProvider<S : AuthorizationSession>(
+    // configのbaseurl
     val baseUrl: String,
 ) : ISessionCache<S>, ITokenProvider {
     abstract val metadata: OpenIDProviderMetadata
@@ -311,6 +312,7 @@ abstract class OpenIDProvider<S : AuthorizationSession>(
         }
     }
 
+    // tokenリクエストの処理
     open fun processTokenRequest(tokenRequest: TokenRequest): TokenResponse {
         val code = when (tokenRequest.grantType) {
             GrantType.authorization_code -> tokenRequest.code ?: throw TokenError(
